@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paraco Supply | Firebase Seed Tool</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1B3A6B; --accent: #2E6DB4; --bg: #F4F7FC;
+      --surface: #fff; --border: #D6E0F0; --text: #1a1a2e;
+      --text-muted: #5a6a84; --success: #1B6B4A; --danger: #8B1A1A;
+      --font-display: 'Barlow Condensed', sans-serif;
+      --font-body: 'Barlow', sans-serif;
+    }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 2rem 1rem 4rem; }
+
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; width: 100%; max-width: 640px;
+      box-shadow: 0 4px 24px rgba(27,58,107,0.08); overflow: hidden;
+    }
+
+    .card-header {
+      background: var(--navy); padding: 24px 28px;
+      display: flex; align-items: center; gap: 14px;
+    }
+
+    .logo {
+      width: 40px; height: 40px; background: var(--accent);
+      border-radius: 7px; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-weight: 800; font-size: 18px; color: #fff;
+      flex-shrink: 0;
+    }
+
+    .card-header-text h1 {
+      font-family: var(--font-display); font-weight: 800; font-size: 20px;
+      color: #fff; letter-spacing: 0.04em;
+    }
+
+    .card-header-text p { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+    .card-body { padding: 28px; }
+
+    .step {
+      display: flex; gap: 14px; margin-bottom: 20px; align-items: flex-start;
+    }
+
+    .step-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--accent); color: #fff;
+      font-family: var(--font-display); font-weight: 800; font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+    }
+
+    .step-content h3 {
+      font-family: var(--font-display); font-weight: 700; font-size: 16px;
+      color: var(--navy); margin-bottom: 4px;
+    }
+
+    .step-content p { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+
+    .config-block {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 6px; padding: 16px; margin: 20px 0;
+    }
+
+    .config-label {
+      font-family: var(--font-display); font-weight: 700; font-size: 11px;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .form-group { margin-bottom: 12px; }
+
+    .form-label {
+      display: block; font-family: var(--font-display); font-weight: 700;
+      font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 5px;
+    }
+
+    .form-input {
+      width: 100%; border: 1px solid var(--border); border-radius: 5px;
+      padding: 9px 12px; font-family: var(--font-body); font-size: 13px;
+      color: var(--text); background: #fff; outline: none;
+      transition: border-color 0.12s, box-shadow 0.12s;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(46,109,180,0.15);
+    }
+
+    .btn-seed {
+      width: 100%; background: var(--navy); color: #fff; border: none;
+      border-radius: 6px; padding: 14px;
+      font-family: var(--font-display); font-weight: 800; font-size: 16px;
+      letter-spacing: 0.05em; cursor: pointer; transition: background 0.12s;
+      margin-top: 8px;
+    }
+
+    .btn-seed:hover { background: var(--accent); }
+    .btn-seed:disabled { background: #aab; cursor: not-allowed; }
+
+    .log {
+      margin-top: 20px; background: #0D1E3A; border-radius: 8px;
+      padding: 16px; font-family: monospace; font-size: 13px;
+      color: #a0c4ff; line-height: 1.7; max-height: 320px;
+      overflow-y: auto; display: none;
+    }
+
+    .log.visible { display: block; }
+    .log .ok   { color: #5EE8A0; }
+    .log .warn { color: #FFD166; }
+    .log .err  { color: #FF6B6B; }
+    .log .info { color: #a0c4ff; }
+
+    .success-banner {
+      background: #F0FFF8; border: 1px solid #A0DFC0;
+      border-radius: 8px; padding: 16px 20px;
+      margin-top: 20px; display: none;
+    }
+
+    .success-banner.visible { display: block; }
+
+    .success-banner h3 {
+      font-family: var(--font-display); font-weight: 800; font-size: 18px;
+      color: var(--success); margin-bottom: 6px;
+    }
+
+    .success-banner p { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+
+    .warning-note {
+      background: #FFF8F0; border: 1px solid #F0D0A0;
+      border-radius: 6px; padding: 12px 16px; margin-bottom: 20px;
+      font-size: 13px; color: #7A4A10; line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="card-header">
+    <div class="logo">PG</div>
+    <div class="card-header-text">
+      <h1>Firebase Seed Tool</h1>
+      <p>Paraco Gas Supply Ordering System - One-time setup</p>
+    </div>
+  </div>
+
+  <div class="card-body">
+
+    <div class="warning-note">
+      Run this tool once to populate your Firebase database with the initial packages and collections. Do not run it again after your system is live or it will create duplicate entries.
+    </div>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Paste your Firebase config below</h3>
+        <p>Find these values in your Firebase project under Project Settings > Your Apps.</p>
+      </div>
+    </div>
+
+    <div class="config-block">
+      <div class="config-label">Firebase Configuration</div>
+      <div class="form-group">
+        <label class="form-label" for="apiKey">API Key</label>
+        <input class="form-input" type="text" id="apiKey" placeholder="AIzaSy..." />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="projectId">Project ID</label>
+        <input class="form-input" type="text" id="projectId" placeholder="paraco-supply-orders" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="appId">App ID</label>
+        <input class="form-input" type="text" id="appId" placeholder="1:123456789:web:abc123" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="messagingSenderId">Messaging Sender ID</label>
+        <input class="form-input" type="text" id="messagingSenderId" placeholder="123456789" />
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Click the button below</h3>
+        <p>The tool will create the <strong>packages</strong> and <strong>orders</strong> collections in Firestore and populate all six kits automatically.</p>
+      </div>
+    </div>
+
+    <button class="btn-seed" id="btnSeed" onclick="runSeed()">Seed Firebase Database</button>
+
+    <div class="log" id="log"></div>
+    <div class="success-banner" id="successBanner">
+      <h3>Database Ready</h3>
+      <p>All six packages have been added to Firestore. Your <strong>orders</strong> collection is also initialized and ready to receive submissions. You can now open <strong>index.html</strong> and <strong>admin.html</strong> with your Firebase config pasted in.</p>
+    </div>
+
+  </div>
+</div>
+
+<script type="module">
+  const PACKAGES = [
+    {
+      id: 'expo-kit',
+      name: 'Expo Kit',
+      type: 'expo',
+      description: 'A complete booth package for trade shows and home expos. Everything your rep needs to run a professional Paraco presence.',
+      items: [
+        'Brochure (10)',
+        'Branded pen (5)',
+        'Branded sticky notes (2)',
+        'Branded sunglasses (5)',
+        'Branded stress ball propane tank (5)',
+        'Branded table cover (1)',
+        'Branded tote bag (5)'
+      ],
+      stock: 10,
+      lowStockThreshold: 3
+    },
+    {
+      id: 'bbq-leave-behind',
+      name: 'BBQ Leave-Behind',
+      type: 'seasonal',
+      description: 'A standalone seasonal leave-behind asset for BBQ season customer touchpoints and summer campaign support.',
+      items: [
+        'BBQ season leave-behind asset (1)'
+      ],
+      stock: 50,
+      lowStockThreshold: 10
+    },
+    {
+      id: 'pool-builder-leave-behind',
+      name: 'Pool Builder Leave-Behind',
+      type: 'trade',
+      description: 'A targeted leave-behind for pool builder and contractor visits. Supports the pool season sales push.',
+      items: [
+        'Pool builder leave-behind asset (1)'
+      ],
+      stock: 50,
+      lowStockThreshold: 10
+    },
+    {
+      id: 'executive-meeting-kit',
+      name: 'Executive Meeting Kit',
+      type: 'executive',
+      description: 'A polished kit for C-level and executive-level meetings. Professional presentation ready.',
+      items: [
+        'Brochure (2)',
+        'Branded pen (2)',
+        'Branded sticky notes (1)',
+        'Branded padfolio (1)'
+      ],
+      stock: 15,
+      lowStockThreshold: 3
+    },
+    {
+      id: 'vendor-meeting-kit',
+      name: 'Vendor Meeting Kit',
+      type: 'vendor',
+      description: 'Materials for vendor and partner meetings. Includes a sell sheet for Paraco service overview.',
+      items: [
+        'Brochure (2)',
+        'Branded pen (2)',
+        'Branded sticky notes (1)',
+        'One-pager sell sheet (2)'
+      ],
+      stock: 20,
+      lowStockThreshold: 5
+    },
+    {
+      id: 'standard-giveaway-kit',
+      name: 'Standard Giveaway Kit',
+      type: 'giveaway',
+      description: 'The go-to kit for community events, fairs, and general brand visibility. Fun and functional.',
+      items: [
+        'Branded pen (3)',
+        'Branded sunglasses (2)',
+        'Branded stress ball propane tank (2)',
+        'Branded tote bag (1)'
+      ],
+      stock: 30,
+      lowStockThreshold: 5
+    }
+  ];
+
+  function log(msg, type = 'info') {
+    const el = document.getElementById('log');
+    el.classList.add('visible');
+    el.innerHTML += `<div class="${type}">${msg}</div>`;
+    el.scrollTop = el.scrollHeight;
+  }
+
+  window.runSeed = async function() {
+    const apiKey           = document.getElementById('apiKey').value.trim();
+    const projectId        = document.getElementById('projectId').value.trim();
+    const appId            = document.getElementById('appId').value.trim();
+    const messagingSenderId= document.getElementById('messagingSenderId').value.trim();
+
+    if (!apiKey || !projectId || !appId || !messagingSenderId) {
+      log('Please fill in all four Firebase config fields before continuing.', 'err');
+      return;
+    }
+
+    const btn = document.getElementById('btnSeed');
+    btn.disabled = true;
+    btn.textContent = 'Seeding database...';
+
+    log('Connecting to Firebase...', 'info');
+
+    try {
+      const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+      const { getFirestore, collection, doc, setDoc, serverTimestamp }
+        = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+
+      const firebaseConfig = {
+        apiKey,
+        authDomain:        `${projectId}.firebaseapp.com`,
+        projectId,
+        storageBucket:     `${projectId}.appspot.com`,
+        messagingSenderId,
+        appId
+      };
+
+      const app = initializeApp(firebaseConfig, 'seed-app');
+      const db  = getFirestore(app);
+
+      log('Connected. Creating packages collection...', 'info');
+
+      for (const pkg of PACKAGES) {
+        const { id, ...data } = pkg;
+        await setDoc(doc(db, 'packages', id), data);
+        log(`Added: ${pkg.name}`, 'ok');
+      }
+
+      log('Creating orders collection placeholder...', 'info');
+      await setDoc(doc(db, 'orders', '_placeholder'), {
+        _note: 'This placeholder initializes the orders collection. It will not appear in the app.',
+        createdAt: serverTimestamp()
+      });
+
+      log('Orders collection initialized.', 'ok');
+      log('', 'info');
+      log('All done. Your database is ready.', 'ok');
+
+      document.getElementById('successBanner').classList.add('visible');
+      btn.textContent = 'Done';
+
+    } catch (e) {
+      log(`Error: ${e.message}`, 'err');
+      log('Double-check your Firebase config values and try again.', 'warn');
+      btn.disabled = false;
+      btn.textContent = 'Retry';
+    }
+  };
+</script>
+</body>
+</html>

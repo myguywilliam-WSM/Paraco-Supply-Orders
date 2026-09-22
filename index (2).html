@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paraco Gas | Marketing Supply Orders</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:        #1B3A6B;
+      --navy-dark:   #122848;
+      --navy-deep:   #0D1E3A;
+      --accent:      #2E6DB4;
+      --accent-mid:  #4A8FD4;
+      --accent-light:#E8EEF7;
+      --bg:          #F4F7FC;
+      --surface:     #FFFFFF;
+      --border:      #D6E0F0;
+      --text:        #1a1a2e;
+      --text-muted:  #5a6a84;
+      --success:     #1B6B4A;
+      --warning:     #C45C1A;
+      --danger:      #8B1A1A;
+      --font-display:'Barlow Condensed', sans-serif;
+      --font-body:   'Barlow', sans-serif;
+      --radius:      8px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--navy-deep);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 16px rgba(10,20,45,0.3);
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .header-logo {
+      width: 38px;
+      height: 38px;
+      background: var(--accent);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 17px;
+      color: #fff;
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+
+    .header-text-main {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 19px;
+      color: #fff;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .header-text-sub {
+      font-size: 11px;
+      color: rgba(255,255,255,0.45);
+      margin-top: 2px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-admin-link {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 6px 14px;
+      border-radius: 5px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .header-admin-link:hover { color: #fff; border-color: rgba(255,255,255,0.35); }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 60%, var(--accent) 100%);
+      padding: 3.5rem 2rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 40px,
+        rgba(255,255,255,0.015) 40px,
+        rgba(255,255,255,0.015) 41px
+      );
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-mid);
+      margin-bottom: 10px;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: #fff;
+      letter-spacing: 0.03em;
+      line-height: 1.05;
+      margin-bottom: 14px;
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      color: rgba(255,255,255,0.65);
+      max-width: 480px;
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+
+    .hero-stats {
+      display: inline-flex;
+      gap: 2px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .hero-stat {
+      padding: 10px 20px;
+      text-align: center;
+    }
+
+    .hero-stat + .hero-stat {
+      border-left: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .hero-stat-num {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 22px;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .hero-stat-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+    }
+
+    .section-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-label {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 26px;
+      color: var(--navy);
+      letter-spacing: 0.02em;
+    }
+
+    /* ── PACKAGE GRID ── */
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 3rem;
+    }
+
+    .package-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.15s, transform 0.12s;
+      cursor: pointer;
+    }
+
+    .package-card:hover {
+      box-shadow: 0 6px 24px rgba(27,58,107,0.12);
+      transform: translateY(-2px);
+    }
+
+    .package-card.out-of-stock {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .package-card.out-of-stock:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .card-stripe {
+      height: 5px;
+      background: var(--accent);
+    }
+
+    .card-stripe.expo    { background: #7B2D8B; }
+    .card-stripe.daily   { background: #2E6DB4; }
+    .card-stripe.event   { background: #1B6B4A; }
+    .card-stripe.custom  { background: #C45C1A; }
+
+    .card-body {
+      padding: 20px 20px 16px;
+      flex: 1;
+    }
+
+    .card-type-badge {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 3px;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .badge-expo    { background: #7B2D8B; }
+    .badge-daily   { background: #2E6DB4; }
+    .badge-event   { background: #1B6B4A; }
+    .badge-custom  { background: #C45C1A; }
+
+    .card-name {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--navy);
+      margin-bottom: 8px;
+      line-height: 1.15;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 14px;
+    }
+
+    .card-contents {
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+    }
+
+    .card-contents-label {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .card-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .card-item::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .card-item.depleted { color: var(--danger); text-decoration: line-through; opacity: 0.6; }
+
+    .card-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg);
+    }
+
+    .stock-indicator {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+    }
+
+    .stock-ok    { color: var(--success); }
+    .stock-low   { color: var(--warning); }
+    .stock-none  { color: var(--danger); }
+
+    .btn-order {
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 18px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .btn-order:hover { background: var(--accent); }
+    .btn-order:disabled { background: #aab; cursor: not-allowed; }
+
+    /* ── ORDER MODAL ── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,20,45,0.6);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s;
+    }
+
+    .overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 24px 64px rgba(10,20,45,0.28);
+      overflow: hidden;
+      transform: translateY(20px);
+      transition: transform 0.18s;
+    }
+
+    .overlay.open .modal { transform: translateY(0); }
+
+    .modal-top {
+      background: var(--navy);
+      padding: 20px 24px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .modal-package-name {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 20px;
+      color: #fff;
+      line-height: 1.15;
+    }
+
+    .modal-package-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      margin-top: 3px;
+    }
+
+    .btn-close {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.6);
+      font-size: 22px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 2px;
+      flex-shrink: 0;
+    }
+
+    .btn-close:hover { color: #fff; }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 10px 12px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--text);
+      background: var(--bg);
+      transition: border-color 0.12s, box-shadow 0.12s;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(46,109,180,0.15);
+      background: #fff;
+    }
+
+    .qty-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .qty-btn {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      background: var(--bg);
+      font-size: 18px;
+      color: var(--navy);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.1s;
+      flex-shrink: 0;
+    }
+
+    .qty-btn:hover { background: var(--accent-light); }
+
+    .qty-display {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--navy);
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .form-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 5px;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-cancel {
+      flex: 1;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 10px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .btn-cancel:hover { background: var(--bg); }
+
+    .btn-submit {
+      flex: 2;
+      background: var(--navy);
+      border: none;
+      border-radius: 5px;
+      padding: 10px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.05em;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .btn-submit:hover { background: var(--accent); }
+    .btn-submit:disabled { background: #aab; cursor: not-allowed; }
+
+    /* ── CONFIRMATION ── */
+    .confirmation {
+      display: none;
+      text-align: center;
+      padding: 2rem 2rem 4rem;
+    }
+
+    .confirmation.visible { display: block; }
+
+    .confirmation-icon {
+      width: 72px;
+      height: 72px;
+      background: var(--success);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 1.5rem;
+      color: #fff;
+    }
+
+    .confirmation-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 28px;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .confirmation-sub {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 380px;
+      margin: 0 auto 24px;
+      line-height: 1.6;
+    }
+
+    .confirmation-detail {
+      background: var(--accent-light);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      max-width: 400px;
+      margin: 0 auto 24px;
+      text-align: left;
+    }
+
+    .conf-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .conf-row:last-child { margin-bottom: 0; }
+    .conf-key { color: var(--text-muted); font-family: var(--font-display); font-weight: 600; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+    .conf-val { color: var(--navy); font-weight: 600; }
+
+    .btn-new-order {
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 28px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .btn-new-order:hover { background: var(--accent); }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--navy-deep);
+      color: #fff;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.03em;
+      z-index: 300;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: transform 0.2s, opacity 0.2s;
+      max-width: 320px;
+    }
+
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-left: 4px solid #2E9E5B; }
+    .toast.error   { border-left: 4px solid var(--danger); }
+
+    /* ── LOADING ── */
+    .loading-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-muted);
+      font-family: var(--font-display);
+      font-size: 16px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      header { padding: 0 1rem; }
+      .hero  { padding: 2.5rem 1rem 2rem; }
+      main   { padding: 1.5rem 1rem 3rem; }
+      .packages-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <div class="header-logo">PG</div>
+    <div>
+      <div class="header-text-main">Supply Orders</div>
+      <div class="header-text-sub">Paraco Gas Corporate</div>
+    </div>
+  </div>
+  <a href="admin.html" class="header-admin-link">Admin</a>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">Paraco Gas Marketing Supplies</div>
+  <h1 class="hero-title">Request a Kit</h1>
+  <p class="hero-sub">Select a pre-built package below. Your order ships from the corporate office within 3 business days.</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num" id="statPackages">-</div>
+      <div class="hero-stat-label">Packages</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num" id="statInStock">-</div>
+      <div class="hero-stat-label">In Stock</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num" id="statOrders">-</div>
+      <div class="hero-stat-label">Orders Placed</div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div id="packagesSection">
+    <div class="section-header">
+      <div class="section-label">Available Now</div>
+      <div class="section-title">Marketing Packages</div>
+    </div>
+    <div class="packages-grid" id="packagesGrid">
+      <div class="loading-state">Loading packages&hellip;</div>
+    </div>
+  </div>
+
+  <div class="confirmation" id="confirmationSection">
+    <div class="confirmation-icon">&#10003;</div>
+    <div class="confirmation-title">Order Submitted</div>
+    <p class="confirmation-sub">Your request has been sent to the corporate office. You'll receive a confirmation email shortly.</p>
+    <div class="confirmation-detail" id="confirmationDetail"></div>
+    <button class="btn-new-order" onclick="resetToPackages()">Place Another Order</button>
+  </div>
+</main>
+
+<!-- Order Modal -->
+<div class="overlay" id="orderOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-top">
+      <div>
+        <div class="modal-package-name" id="modalName"></div>
+        <div class="modal-package-sub" id="modalSub"></div>
+      </div>
+      <button class="btn-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label" for="inputName">Your Full Name</label>
+        <input class="form-input" type="text" id="inputName" placeholder="e.g. Darin Haines" autocomplete="name" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="inputEmail">Your Work Email</label>
+        <input class="form-input" type="email" id="inputEmail" placeholder="e.g. dhaines@paracogas.com" autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="inputShipTo">Ship To Address</label>
+        <input class="form-input" type="text" id="inputShipTo" placeholder="Street, City, State, ZIP" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Quantity</label>
+        <div class="qty-row">
+          <button class="qty-btn" onclick="adjustQty(-1)">&#8722;</button>
+          <div class="qty-display" id="qtyDisplay">1</div>
+          <button class="qty-btn" onclick="adjustQty(1)">&#43;</button>
+        </div>
+        <div class="form-note" id="qtyNote"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="inputNotes">Notes (optional)</label>
+        <input class="form-input" type="text" id="inputNotes" placeholder="Event name, special instructions, etc." />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-submit" id="btnSubmit" onclick="submitOrder()">Submit Order</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase + EmailJS -->
+<script type="module">
+  // ─────────────────────────────────────────
+  // STEP 1: Replace with your Firebase config
+  // ─────────────────────────────────────────
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getFirestore, collection, getDocs, doc, updateDoc, addDoc, increment, serverTimestamp, onSnapshot, query, orderBy }
+    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  const FIREBASE_CONFIG = {
+    apiKey:            "YOUR_API_KEY",
+    authDomain:        "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId:         "YOUR_PROJECT_ID",
+    storageBucket:     "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId:             "YOUR_APP_ID"
+  };
+
+  // ─────────────────────────────────────────
+  // STEP 2: Replace with your EmailJS keys
+  // ─────────────────────────────────────────
+  const EMAILJS_SERVICE_ID  = 'YOUR_EMAILJS_SERVICE_ID';
+  const EMAILJS_TEMPLATE_ID = 'YOUR_EMAILJS_TEMPLATE_ID';
+  const EMAILJS_PUBLIC_KEY  = 'YOUR_EMAILJS_PUBLIC_KEY';
+  const ADMIN_EMAIL         = 'myguywilliam@gmail.com';
+
+  const app = initializeApp(FIREBASE_CONFIG);
+  const db  = getFirestore(app);
+
+  // State
+  let packages     = [];
+  let activePackage = null;
+  let orderQty     = 1;
+  let totalOrders  = 0;
+
+  // ── Load Packages ──
+  async function loadPackages() {
+    try {
+      const snap = await getDocs(collection(db, 'packages'));
+      packages = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+      // Load total orders count
+      const oSnap = await getDocs(collection(db, 'orders'));
+      totalOrders = oSnap.size;
+
+      renderPackages();
+      updateStats();
+    } catch (e) {
+      console.error(e);
+      // Show demo packages if Firebase not yet configured
+      packages = getDemoPackages();
+      renderPackages();
+      updateStats();
+    }
+  }
+
+  function getDemoPackages() {
+    return [
+      {
+        id: 'expo-kit',
+        name: 'Expo Kit',
+        type: 'expo',
+        description: 'Everything you need to run a professional booth at trade shows and home expos.',
+        items: ['Branded table cover (1)', 'Tri-fold brochures (50)', 'Business cards (100)', 'Branded pens (25)', 'Promo flyers (50)', 'Branded tote bags (10)'],
+        stock: 8,
+        lowStockThreshold: 3
+      },
+      {
+        id: 'daily-kit',
+        name: 'Day-to-Day Kit',
+        type: 'daily',
+        description: 'Standard marketing materials for field reps to keep on hand for customer visits.',
+        items: ['Brochures (25)', 'Business cards (50)', 'Leave-behind folders (10)', 'Branded notepads (5)'],
+        stock: 22,
+        lowStockThreshold: 5
+      },
+      {
+        id: 'event-kit',
+        name: 'Community Event Kit',
+        type: 'event',
+        description: 'Branded materials for local community events, fairs, and sponsorship appearances.',
+        items: ['Pop-up banner (1)', 'Branded tablecloth (1)', 'Promo flyers (75)', 'Giveaway items (30)', 'Branded bags (15)'],
+        stock: 4,
+        lowStockThreshold: 3
+      },
+      {
+        id: 'new-customer-kit',
+        name: 'New Customer Welcome Kit',
+        type: 'custom',
+        description: 'A polished welcome package for new residential and commercial accounts.',
+        items: ['Welcome letter (1)', 'Safety guide booklet (1)', 'Account info card (1)', 'Branded magnet (1)', 'Emergency contact card (1)'],
+        stock: 35,
+        lowStockThreshold: 10
+      },
+    ];
+  }
+
+  function renderPackages() {
+    const grid = document.getElementById('packagesGrid');
+    if (!packages.length) {
+      grid.innerHTML = '<div class="loading-state">No packages available. Check back soon.</div>';
+      return;
+    }
+
+    grid.innerHTML = packages.map(pkg => {
+      const outOfStock = pkg.stock <= 0;
+      const lowStock   = !outOfStock && pkg.stock <= (pkg.lowStockThreshold || 3);
+      const stockClass = outOfStock ? 'stock-none' : lowStock ? 'stock-low' : 'stock-ok';
+      const stockLabel = outOfStock ? 'Out of Stock' : lowStock ? `Low Stock (${pkg.stock} left)` : `${pkg.stock} Available`;
+
+      return `
+        <div class="package-card ${outOfStock ? 'out-of-stock' : ''}" onclick="${outOfStock ? '' : `openOrder('${pkg.id}')`}">
+          <div class="card-stripe ${pkg.type || 'daily'}"></div>
+          <div class="card-body">
+            <span class="card-type-badge badge-${pkg.type || 'daily'}">${pkg.type || 'Kit'}</span>
+            <div class="card-name">${pkg.name}</div>
+            <div class="card-desc">${pkg.description}</div>
+            <div class="card-contents">
+              <div class="card-contents-label">What's Included</div>
+              ${(pkg.items || []).map(item => `<div class="card-item">${item}</div>`).join('')}
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="stock-indicator ${stockClass}">${stockLabel}</span>
+            <button class="btn-order" ${outOfStock ? 'disabled' : `onclick="event.stopPropagation(); openOrder('${pkg.id}')"`}>
+              ${outOfStock ? 'Unavailable' : 'Request Kit'}
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function updateStats() {
+    const inStock = packages.filter(p => p.stock > 0).length;
+    document.getElementById('statPackages').textContent = packages.length;
+    document.getElementById('statInStock').textContent  = inStock;
+    document.getElementById('statOrders').textContent   = totalOrders;
+  }
+
+  // ── Order Modal ──
+  window.openOrder = function(pkgId) {
+    activePackage = packages.find(p => p.id === pkgId);
+    if (!activePackage) return;
+    orderQty = 1;
+
+    document.getElementById('modalName').textContent    = activePackage.name;
+    document.getElementById('modalSub').textContent     = `${activePackage.stock} kits available`;
+    document.getElementById('qtyDisplay').textContent   = orderQty;
+    document.getElementById('qtyNote').textContent      = `Max ${activePackage.stock} available`;
+    document.getElementById('inputName').value          = '';
+    document.getElementById('inputEmail').value         = '';
+    document.getElementById('inputShipTo').value        = '';
+    document.getElementById('inputNotes').value         = '';
+    document.getElementById('orderOverlay').classList.add('open');
+  };
+
+  window.closeModal = function() {
+    document.getElementById('orderOverlay').classList.remove('open');
+    activePackage = null;
+  };
+
+  window.handleOverlayClick = function(e) {
+    if (e.target === document.getElementById('orderOverlay')) closeModal();
+  };
+
+  window.adjustQty = function(dir) {
+    if (!activePackage) return;
+    orderQty = Math.max(1, Math.min(activePackage.stock, orderQty + dir));
+    document.getElementById('qtyDisplay').textContent = orderQty;
+  };
+
+  window.submitOrder = async function() {
+    const name    = document.getElementById('inputName').value.trim();
+    const email   = document.getElementById('inputEmail').value.trim();
+    const shipTo  = document.getElementById('inputShipTo').value.trim();
+    const notes   = document.getElementById('inputNotes').value.trim();
+
+    if (!name || !email || !shipTo) {
+      showToast('Please fill in all required fields.', 'error');
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showToast('Please enter a valid email address.', 'error');
+      return;
+    }
+
+    const btn = document.getElementById('btnSubmit');
+    btn.disabled = true;
+    btn.textContent = 'Submitting&hellip;';
+
+    try {
+      // Write order to Firestore
+      const orderData = {
+        packageId:   activePackage.id,
+        packageName: activePackage.name,
+        requester:   name,
+        email,
+        shipTo,
+        quantity:    orderQty,
+        notes,
+        status:      'pending',
+        createdAt:   serverTimestamp(),
+      };
+
+      await addDoc(collection(db, 'orders'), orderData);
+
+      // Deduct inventory
+      await updateDoc(doc(db, 'packages', activePackage.id), {
+        stock: increment(-orderQty)
+      });
+
+      // Send emails via EmailJS
+      await sendEmails({ name, email, shipTo, notes, orderData });
+
+      // Update local state
+      const pkg = packages.find(p => p.id === activePackage.id);
+      if (pkg) pkg.stock -= orderQty;
+      totalOrders++;
+
+      closeModal();
+      showConfirmation({ name, email, shipTo, pkg: activePackage.name, qty: orderQty });
+      renderPackages();
+      updateStats();
+
+    } catch (e) {
+      console.error(e);
+      showToast('Something went wrong. Please try again or contact the corporate office.', 'error');
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Submit Order';
+  };
+
+  async function sendEmails({ name, email, shipTo, notes, orderData }) {
+    const params = {
+      to_name:      name,
+      to_email:     email,
+      admin_email:  ADMIN_EMAIL,
+      package_name: orderData.packageName,
+      quantity:     orderData.quantity,
+      ship_to:      shipTo,
+      notes:        notes || 'None',
+      order_date:   new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+    };
+
+    await fetch(`https://api.emailjs.com/api/v1.0/email/send`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        service_id:  EMAILJS_SERVICE_ID,
+        template_id: EMAILJS_TEMPLATE_ID,
+        user_id:     EMAILJS_PUBLIC_KEY,
+        template_params: params,
+      }),
+    });
+  }
+
+  function showConfirmation({ name, email, shipTo, pkg, qty }) {
+    document.getElementById('packagesSection').style.display = 'none';
+    const section = document.getElementById('confirmationSection');
+    section.classList.add('visible');
+
+    document.getElementById('confirmationDetail').innerHTML = `
+      <div class="conf-row"><span class="conf-key">Package</span><span class="conf-val">${pkg}</span></div>
+      <div class="conf-row"><span class="conf-key">Quantity</span><span class="conf-val">${qty}</span></div>
+      <div class="conf-row"><span class="conf-key">Requested By</span><span class="conf-val">${name}</span></div>
+      <div class="conf-row"><span class="conf-key">Confirmation To</span><span class="conf-val">${email}</span></div>
+      <div class="conf-row"><span class="conf-key">Ship To</span><span class="conf-val">${shipTo}</span></div>
+    `;
+  }
+
+  window.resetToPackages = function() {
+    document.getElementById('packagesSection').style.display = '';
+    document.getElementById('confirmationSection').classList.remove('visible');
+  };
+
+  function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  loadPackages();
+</script>
+</body>
+</html>

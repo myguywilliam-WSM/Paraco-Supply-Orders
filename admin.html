@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paraco Gas | Supply Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:        #1B3A6B;
+      --navy-dark:   #122848;
+      --navy-deep:   #0D1E3A;
+      --accent:      #2E6DB4;
+      --accent-light:#E8EEF7;
+      --bg:          #F4F7FC;
+      --surface:     #FFFFFF;
+      --border:      #D6E0F0;
+      --text:        #1a1a2e;
+      --text-muted:  #5a6a84;
+      --success:     #1B6B4A;
+      --warning:     #C45C1A;
+      --danger:      #8B1A1A;
+      --font-display:'Barlow Condensed', sans-serif;
+      --font-body:   'Barlow', sans-serif;
+    }
+
+    body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── LOGIN ── */
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 100%);
+      padding: 2rem;
+    }
+
+    .login-box {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 40px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+    }
+
+    .login-logo {
+      width: 48px;
+      height: 48px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 20px;
+      color: #fff;
+      margin: 0 auto 20px;
+    }
+
+    .login-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 24px;
+      color: var(--navy);
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .login-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .login-label {
+      display: block;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .login-input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 11px 14px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--text);
+      background: var(--bg);
+      outline: none;
+      margin-bottom: 20px;
+      transition: border-color 0.12s, box-shadow 0.12s;
+    }
+
+    .login-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(46,109,180,0.15);
+      background: #fff;
+    }
+
+    .login-btn {
+      width: 100%;
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 12px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .login-btn:hover { background: var(--accent); }
+
+    .login-error {
+      background: #FEE;
+      border: 1px solid #ECC;
+      border-radius: 5px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--danger);
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    /* ── DASHBOARD ── */
+    .dashboard { display: none; }
+    .dashboard.visible { display: block; }
+
+    header {
+      background: var(--navy-deep);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 16px rgba(10,20,45,0.3);
+    }
+
+    .header-brand { display: flex; align-items: center; gap: 14px; }
+
+    .header-logo {
+      width: 36px; height: 36px;
+      background: var(--accent);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-weight: 800; font-size: 16px; color: #fff;
+    }
+
+    .header-title {
+      font-family: var(--font-display); font-weight: 700; font-size: 18px;
+      color: #fff; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+
+    .header-title span {
+      font-weight: 500; color: rgba(255,255,255,0.5); font-size: 14px;
+      margin-left: 8px; letter-spacing: 0.04em;
+    }
+
+    .header-right { display: flex; align-items: center; gap: 12px; }
+
+    .btn-order-page {
+      font-family: var(--font-display); font-weight: 600; font-size: 13px;
+      letter-spacing: 0.05em; color: rgba(255,255,255,0.55); text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 5px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .btn-order-page:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+
+    .btn-logout {
+      background: none; border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.5); font-family: var(--font-display);
+      font-weight: 600; font-size: 13px; padding: 6px 14px;
+      border-radius: 5px; cursor: pointer; transition: all 0.15s;
+    }
+    .btn-logout:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+
+    /* ── CONTENT ── */
+    .content { max-width: 1300px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+
+    /* ── METRICS ── */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 2.5rem;
+    }
+
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent);
+    }
+
+    .metric-card.alert::before { background: var(--warning); }
+    .metric-card.danger::before { background: var(--danger); }
+    .metric-card.success::before { background: var(--success); }
+
+    .metric-label {
+      font-family: var(--font-display); font-weight: 700; font-size: 11px;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .metric-value {
+      font-family: var(--font-display); font-weight: 800; font-size: 36px;
+      color: var(--navy); line-height: 1;
+    }
+
+    .metric-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    /* ── ALERTS ── */
+    .alerts-section { margin-bottom: 2rem; }
+
+    .alert-item {
+      background: #FFF8F0;
+      border: 1px solid #F0D0A0;
+      border-left: 4px solid var(--warning);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+
+    .alert-item.critical {
+      background: #FFF0F0;
+      border-color: #F0A0A0;
+      border-left-color: var(--danger);
+    }
+
+    .alert-label { font-weight: 600; color: var(--navy); }
+    .alert-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    .btn-restock {
+      background: var(--navy); color: #fff; border: none; border-radius: 5px;
+      padding: 6px 14px; font-family: var(--font-display); font-weight: 700;
+      font-size: 12px; letter-spacing: 0.05em; cursor: pointer;
+      transition: background 0.12s; white-space: nowrap;
+    }
+    .btn-restock:hover { background: var(--accent); }
+
+    /* ── TWO COLUMN ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+    @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* ── PANELS ── */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .panel-title {
+      font-family: var(--font-display); font-weight: 800; font-size: 17px;
+      color: var(--navy); letter-spacing: 0.02em;
+    }
+
+    .panel-count {
+      font-family: var(--font-display); font-weight: 700; font-size: 13px;
+      color: var(--text-muted); letter-spacing: 0.04em;
+    }
+
+    /* ── ORDERS TABLE ── */
+    .orders-table { width: 100%; border-collapse: collapse; }
+
+    .orders-table th {
+      font-family: var(--font-display); font-weight: 700; font-size: 11px;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);
+      padding: 10px 16px; text-align: left;
+      background: var(--bg); border-bottom: 1px solid var(--border);
+    }
+
+    .orders-table td {
+      padding: 12px 16px; border-bottom: 1px solid var(--border);
+      font-size: 13px; color: var(--text); vertical-align: top;
+    }
+
+    .orders-table tr:last-child td { border-bottom: none; }
+    .orders-table tr:hover td { background: var(--accent-light); }
+
+    .order-name { font-weight: 600; color: var(--navy); }
+    .order-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    .status-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .status-pending  { background: #FFF3CD; color: #856404; }
+    .status-shipped  { background: #D1FAE5; color: #065F46; }
+    .status-fulfilled{ background: #E0E7FF; color: #3730A3; }
+
+    .btn-ship {
+      background: var(--success); color: #fff; border: none; border-radius: 4px;
+      padding: 5px 12px; font-family: var(--font-display); font-weight: 700;
+      font-size: 11px; letter-spacing: 0.04em; cursor: pointer;
+      transition: background 0.12s; white-space: nowrap;
+    }
+    .btn-ship:hover { filter: brightness(1.1); }
+
+    /* ── INVENTORY TABLE ── */
+    .inv-table { width: 100%; border-collapse: collapse; }
+
+    .inv-table th {
+      font-family: var(--font-display); font-weight: 700; font-size: 11px;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);
+      padding: 10px 16px; text-align: left;
+      background: var(--bg); border-bottom: 1px solid var(--border);
+    }
+
+    .inv-table td {
+      padding: 12px 16px; border-bottom: 1px solid var(--border);
+      font-size: 13px; vertical-align: middle;
+    }
+
+    .inv-table tr:last-child td { border-bottom: none; }
+
+    .inv-name { font-weight: 600; color: var(--navy); font-size: 14px; }
+    .inv-type { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+    .stock-bar-wrap {
+      background: var(--bg);
+      border-radius: 4px;
+      height: 6px;
+      width: 80px;
+      overflow: hidden;
+      display: inline-block;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    .stock-bar {
+      height: 100%;
+      border-radius: 4px;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+
+    .stock-bar.low { background: var(--warning); }
+    .stock-bar.critical { background: var(--danger); }
+
+    .stock-num {
+      font-family: var(--font-display); font-weight: 700; font-size: 13px;
+      vertical-align: middle;
+    }
+
+    .stock-num.ok       { color: var(--success); }
+    .stock-num.low      { color: var(--warning); }
+    .stock-num.critical { color: var(--danger); }
+
+    .inv-edit-input {
+      width: 70px; border: 1px solid var(--border); border-radius: 4px;
+      padding: 5px 8px; font-size: 13px; font-family: var(--font-body);
+      text-align: center; outline: none;
+    }
+    .inv-edit-input:focus { border-color: var(--accent); }
+
+    .btn-update-stock {
+      background: var(--accent); color: #fff; border: none; border-radius: 4px;
+      padding: 5px 12px; font-family: var(--font-display); font-weight: 700;
+      font-size: 11px; letter-spacing: 0.04em; cursor: pointer;
+      transition: background 0.12s;
+    }
+    .btn-update-stock:hover { background: var(--navy); }
+
+    /* ── EMPTY ── */
+    .empty-row td {
+      text-align: center;
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 2rem;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: var(--navy-deep); color: #fff;
+      border-radius: 8px; padding: 12px 20px;
+      font-family: var(--font-display); font-weight: 600; font-size: 14px;
+      z-index: 300;
+      transform: translateY(80px); opacity: 0;
+      transition: transform 0.2s, opacity 0.2s;
+      max-width: 320px;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-left: 4px solid #2E9E5B; }
+    .toast.error   { border-left: 4px solid var(--danger); }
+
+    @media (max-width: 640px) {
+      header { padding: 0 1rem; }
+      .content { padding: 1rem 1rem 3rem; }
+      .metrics { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">PG</div>
+    <div class="login-title">Admin Access</div>
+    <p class="login-sub">Paraco Gas Supply Management</p>
+    <div class="login-error" id="loginError">Incorrect password. Please try again.</div>
+    <label class="login-label" for="pwInput">Password</label>
+    <input class="login-input" type="password" id="pwInput" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')tryLogin()" />
+    <button class="login-btn" onclick="tryLogin()">Sign In</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+  <header>
+    <div class="header-brand">
+      <div class="header-logo">PG</div>
+      <div class="header-title">Supply Admin <span>Corporate Dashboard</span></div>
+    </div>
+    <div class="header-right">
+      <a href="index.html" class="btn-order-page">Order Page</a>
+      <button class="btn-logout" onclick="logout()">Sign Out</button>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- Metrics -->
+    <div class="metrics" id="metricsRow"></div>
+
+    <!-- Low Stock Alerts -->
+    <div class="alerts-section" id="alertsSection"></div>
+
+    <!-- Orders + Inventory -->
+    <div class="two-col">
+
+      <!-- Orders Panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Incoming Orders</div>
+          <div class="panel-count" id="ordersCount">Loading&hellip;</div>
+        </div>
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Package</th>
+              <th>Qty</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody">
+            <tr class="empty-row"><td colspan="5">Loading orders&hellip;</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Inventory Panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Inventory</div>
+          <div class="panel-count" id="inventoryCount">Loading&hellip;</div>
+        </div>
+        <table class="inv-table">
+          <thead>
+            <tr>
+              <th>Package</th>
+              <th>Stock</th>
+              <th>Adjust</th>
+            </tr>
+          </thead>
+          <tbody id="inventoryBody">
+            <tr class="empty-row"><td colspan="3">Loading inventory&hellip;</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+  // ─────────────────────────────────────────
+  // STEP 1: Same Firebase config as index.html
+  // ─────────────────────────────────────────
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getFirestore, collection, getDocs, doc, updateDoc, onSnapshot, query, orderBy, limit }
+    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  const FIREBASE_CONFIG = {
+    apiKey:            "YOUR_API_KEY",
+    authDomain:        "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId:         "YOUR_PROJECT_ID",
+    storageBucket:     "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId:             "YOUR_APP_ID"
+  };
+
+  // ─────────────────────────────────────────
+  // STEP 2: Set your admin password
+  // ─────────────────────────────────────────
+  const ADMIN_PASSWORD = 'paraco2026';
+
+  const app = initializeApp(FIREBASE_CONFIG);
+  const db  = getFirestore(app);
+
+  let packages = [];
+  let orders   = [];
+
+  // ── AUTH ──
+  window.tryLogin = function() {
+    const pw = document.getElementById('pwInput').value;
+    if (pw === ADMIN_PASSWORD) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboard').classList.add('visible');
+      loadAll();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+    }
+  };
+
+  window.logout = function() {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('dashboard').classList.remove('visible');
+    document.getElementById('pwInput').value = '';
+    document.getElementById('loginError').style.display = 'none';
+  };
+
+  // ── LOAD ──
+  async function loadAll() {
+    await Promise.all([loadPackages(), loadOrders()]);
+    renderMetrics();
+    renderAlerts();
+    renderInventory();
+    renderOrders();
+  }
+
+  async function loadPackages() {
+    try {
+      const snap = await getDocs(collection(db, 'packages'));
+      packages = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch (e) {
+      console.error('Packages:', e);
+      packages = getDemoPackages();
+    }
+  }
+
+  async function loadOrders() {
+    try {
+      const snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(50)));
+      orders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch (e) {
+      console.error('Orders:', e);
+      orders = getDemoOrders();
+    }
+  }
+
+  function getDemoPackages() {
+    return [
+      { id:'expo-kit',        name:'Expo Kit',                 type:'expo',   stock:8,  lowStockThreshold:3 },
+      { id:'daily-kit',       name:'Day-to-Day Kit',           type:'daily',  stock:22, lowStockThreshold:5 },
+      { id:'event-kit',       name:'Community Event Kit',      type:'event',  stock:2,  lowStockThreshold:3 },
+      { id:'new-customer-kit',name:'New Customer Welcome Kit', type:'custom', stock:35, lowStockThreshold:10 },
+    ];
+  }
+
+  function getDemoOrders() {
+    return [
+      { id:'ord1', packageName:'Expo Kit',          requester:'Darin Haines',   email:'dhaines@paracogas.com', shipTo:'123 Main St, Hauppauge NY', quantity:2, status:'pending',  createdAt:{ toDate:()=>new Date('2026-06-09') } },
+      { id:'ord2', packageName:'Day-to-Day Kit',    requester:'Jon Broad',      email:'jbroad@paracogas.com',  shipTo:'88 Charter Oak Ave, Hartford CT', quantity:1, status:'shipped',  createdAt:{ toDate:()=>new Date('2026-06-08') } },
+      { id:'ord3', packageName:'Community Event Kit',requester:'Kara Campbell', email:'kcampbell@paracogas.com',shipTo:'200 Reservoir Ave, Providence RI', quantity:1, status:'pending',  createdAt:{ toDate:()=>new Date('2026-06-07') } },
+    ];
+  }
+
+  // ── RENDER METRICS ──
+  function renderMetrics() {
+    const pending   = orders.filter(o => o.status === 'pending').length;
+    const shipped   = orders.filter(o => o.status === 'shipped').length;
+    const lowStock  = packages.filter(p => p.stock > 0 && p.stock <= (p.lowStockThreshold || 3)).length;
+    const outOfStock= packages.filter(p => p.stock <= 0).length;
+
+    document.getElementById('metricsRow').innerHTML = `
+      <div class="metric-card ${pending > 0 ? 'alert' : ''}">
+        <div class="metric-label">Pending Orders</div>
+        <div class="metric-value">${pending}</div>
+        <div class="metric-sub">Awaiting fulfillment</div>
+      </div>
+      <div class="metric-card success">
+        <div class="metric-label">Shipped</div>
+        <div class="metric-value">${shipped}</div>
+        <div class="metric-sub">Orders in transit</div>
+      </div>
+      <div class="metric-card ${lowStock > 0 ? 'alert' : ''}">
+        <div class="metric-label">Low Stock</div>
+        <div class="metric-value">${lowStock}</div>
+        <div class="metric-sub">Packages below threshold</div>
+      </div>
+      <div class="metric-card ${outOfStock > 0 ? 'danger' : ''}">
+        <div class="metric-label">Out of Stock</div>
+        <div class="metric-value">${outOfStock}</div>
+        <div class="metric-sub">Packages unavailable</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Total Orders</div>
+        <div class="metric-value">${orders.length}</div>
+        <div class="metric-sub">All time</div>
+      </div>
+    `;
+  }
+
+  // ── RENDER ALERTS ──
+  function renderAlerts() {
+    const alerts = packages.filter(p => p.stock <= (p.lowStockThreshold || 3));
+    const section = document.getElementById('alertsSection');
+    if (!alerts.length) { section.innerHTML = ''; return; }
+    section.innerHTML = alerts.map(p => `
+      <div class="alert-item ${p.stock <= 0 ? 'critical' : ''}">
+        <div>
+          <div class="alert-label">${p.stock <= 0 ? 'Out of Stock' : 'Low Stock'}: ${p.name}</div>
+          <div class="alert-sub">${p.stock} units remaining (threshold: ${p.lowStockThreshold || 3})</div>
+        </div>
+        <button class="btn-restock" onclick="focusRestock('${p.id}')">Update Stock</button>
+      </div>
+    `).join('');
+  }
+
+  // ── RENDER ORDERS ──
+  function renderOrders() {
+    const pending = orders.filter(o => o.status === 'pending');
+    const rest    = orders.filter(o => o.status !== 'pending');
+    const sorted  = [...pending, ...rest];
+
+    document.getElementById('ordersCount').textContent = `${orders.length} total`;
+
+    if (!orders.length) {
+      document.getElementById('ordersBody').innerHTML = '<tr class="empty-row"><td colspan="5">No orders yet.</td></tr>';
+      return;
+    }
+
+    document.getElementById('ordersBody').innerHTML = sorted.map(order => {
+      const date = order.createdAt?.toDate ? order.createdAt.toDate().toLocaleDateString('en-US', {month:'short',day:'numeric'}) : 'Recent';
+      return `
+        <tr>
+          <td>
+            <div class="order-name">${order.requester}</div>
+            <div class="order-meta">${date} &middot; ${order.shipTo}</div>
+          </td>
+          <td>${order.packageName}</td>
+          <td>${order.quantity}</td>
+          <td><span class="status-badge status-${order.status}">${order.status}</span></td>
+          <td>
+            ${order.status === 'pending'
+              ? `<button class="btn-ship" onclick="markShipped('${order.id}')">Mark Shipped</button>`
+              : order.status === 'shipped'
+              ? `<button class="btn-ship" style="background:var(--accent)" onclick="markFulfilled('${order.id}')">Mark Fulfilled</button>`
+              : ''}
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // ── RENDER INVENTORY ──
+  function renderInventory() {
+    document.getElementById('inventoryCount').textContent = `${packages.length} packages`;
+    const maxStock = Math.max(...packages.map(p => p.stock), 1);
+
+    document.getElementById('inventoryBody').innerHTML = packages.map(pkg => {
+      const pct  = Math.round((pkg.stock / maxStock) * 100);
+      const cls  = pkg.stock <= 0 ? 'critical' : pkg.stock <= (pkg.lowStockThreshold || 3) ? 'low' : 'ok';
+      const numCls = cls;
+      return `
+        <tr id="inv-row-${pkg.id}">
+          <td>
+            <div class="inv-name">${pkg.name}</div>
+            <div class="inv-type">${pkg.type || 'kit'}</div>
+          </td>
+          <td>
+            <span class="stock-bar-wrap"><span class="stock-bar ${cls}" style="width:${pct}%"></span></span>
+            <span class="stock-num ${numCls}">${pkg.stock}</span>
+          </td>
+          <td>
+            <input class="inv-edit-input" id="inv-input-${pkg.id}" type="number" min="0" value="${pkg.stock}" />
+            <button class="btn-update-stock" onclick="updateStock('${pkg.id}')">Set</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // ── ACTIONS ──
+  window.markShipped = async function(orderId) {
+    try {
+      await updateDoc(doc(db, 'orders', orderId), { status: 'shipped' });
+      const o = orders.find(o => o.id === orderId);
+      if (o) o.status = 'shipped';
+      renderOrders();
+      renderMetrics();
+      showToast('Order marked as shipped.', 'success');
+    } catch (e) {
+      // Demo mode
+      const o = orders.find(o => o.id === orderId);
+      if (o) o.status = 'shipped';
+      renderOrders();
+      renderMetrics();
+      showToast('Order marked as shipped.', 'success');
+    }
+  };
+
+  window.markFulfilled = async function(orderId) {
+    try {
+      await updateDoc(doc(db, 'orders', orderId), { status: 'fulfilled' });
+      const o = orders.find(o => o.id === orderId);
+      if (o) o.status = 'fulfilled';
+      renderOrders();
+      renderMetrics();
+      showToast('Order marked as fulfilled.', 'success');
+    } catch (e) {
+      const o = orders.find(o => o.id === orderId);
+      if (o) o.status = 'fulfilled';
+      renderOrders();
+      renderMetrics();
+      showToast('Order marked as fulfilled.', 'success');
+    }
+  };
+
+  window.updateStock = async function(pkgId) {
+    const input = document.getElementById(`inv-input-${pkgId}`);
+    const newStock = parseInt(input.value);
+    if (isNaN(newStock) || newStock < 0) { showToast('Enter a valid stock number.', 'error'); return; }
+
+    try {
+      await updateDoc(doc(db, 'packages', pkgId), { stock: newStock });
+    } catch (e) {
+      console.log('Demo mode - stock update local only');
+    }
+
+    const pkg = packages.find(p => p.id === pkgId);
+    if (pkg) pkg.stock = newStock;
+    renderInventory();
+    renderAlerts();
+    renderMetrics();
+    showToast(`Stock updated for ${pkg?.name || 'package'}.`, 'success');
+  };
+
+  window.focusRestock = function(pkgId) {
+    const input = document.getElementById(`inv-input-${pkgId}`);
+    if (input) { input.focus(); input.select(); }
+  };
+
+  function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+</script>
+</body>
+</html>
